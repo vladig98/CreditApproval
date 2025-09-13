@@ -9,19 +9,12 @@ with different roles.
 
 ## 📌 Endpoints
 
-  ---------------------------------------------------------------------------------
-  Endpoint                        Method             Description
-  ------------------------------- ------------------ ------------------------------
-  `/api/Credit/requests/submit`   `POST`             Submits a credit request.
+| Endpoint | Method | Description |
+|---------|--------|-------------|
+| `/api/Credit/requests/submit` | `POST` | Submits a credit request. |
+| `/api/Credit/requests/review` | `POST` | Reviews and approves/rejects a credit request (only accessible by **Admin** users). |
+| `/api/Credit/requests/list` | `GET` | Lists all submitted credit requests. |
 
-  `/api/Credit/requests/review`   `PATCH`             Reviews and approves/rejects a
-                                                     credit request (only
-                                                     accessible by **Admin**
-                                                     users).
-
-  `/api/Credit/requests/list`     `GET`              Lists all submitted credit
-                                                     requests.
-  ---------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
 
@@ -103,6 +96,10 @@ The solution includes:
 - ✅ Setup and execution instructions (this README)\
 - ✅ Seed data for testing (support, manager, and admin users)
 
+
+------------------------------------------------------------------------
+Project Description
+------------------------------------------------------------------------
 
 # Take-Home Task: Build a Simple Credit Approval API
 
