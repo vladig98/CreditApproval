@@ -10,4 +10,6 @@ public class CreditModel
     public CreditType CreditType { get; set; }
     public CreditStatus Status { get; set; }
     public string Identifier { get; set; } = string.Empty;
+    public string Reviewer { get; set; } = string.Empty;
+    public DateTime ReviewTime { get; set; }
 }

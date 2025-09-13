@@ -4,6 +4,25 @@ public class CreditService(
     CreditApprovalDbContext dbContext,
     CreditIdentifierGenerator identifierGenerator) : ICreditService
 {
+    private const decimal CREDIT_REJECTION_MULTIPLIER = 20M;
+
+    public bool CheckIfCanBeApproved(string identifier, CreditDecision decision)
+    {
+        CreditModel credit = dbContext.Credits.First(x => x.Identifier == identifier);
+
+        if (credit.CreditAmount > credit.MonthlyIncome * CREDIT_REJECTION_MULTIPLIER && decision == CreditDecision.Approve)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public bool Exists(string identifier)
+    {
+        return dbContext.Credits.Any(x => x.Identifier == identifier);
+    }
+
     public async Task<List<CreditDTO>> GetAllAsync(string? creditType, string? status, CancellationToken token)
     {
         IQueryable<CreditModel> query = dbContext.Credits.AsQueryable();
@@ -35,6 +54,29 @@ public class CreditService(
         })];
 
         return dtos;
+    }
+
+    public bool IsReviewed(string identifier)
+    {
+        return dbContext.Credits.First(x => x.Identifier == identifier).Status != CreditStatus.PendingReview;
+    }
+
+    public async Task ReviewCreditAsync(ReviewCreditDTO data, CancellationToken token)
+    {
+        CreditModel credit = await dbContext.Credits.FirstAsync(x => x.Identifier == data.Identifier, token);
+        CreditDecision decision = Enum.Parse<CreditDecision>(data.Decision, ignoreCase: true);
+
+        credit.Status = decision switch
+        {
+            CreditDecision.Approve => CreditStatus.Approved,
+            CreditDecision.Reject => CreditStatus.Rejected,
+            _ => CreditStatus.PendingReview
+        };
+
+        credit.Reviewer = data.ReviewerName;
+        credit.ReviewTime = data.ReviewTime;
+
+        await dbContext.SaveChangesAsync(token);
     }
 
     public async Task SubmitCreditAsync(SubmitCreditDTO data, CancellationToken token)

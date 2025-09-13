@@ -4,6 +4,7 @@
 [ApiController]
 public class CreditController(
     IValidator<SubmitCreditDTO> creditValidator,
+    IValidator<ReviewCreditDTO> reviewValidator,
     ICreditService creditService) : ControllerBase
 {
     [HttpPost("submit")]
@@ -26,14 +27,33 @@ public class CreditController(
     }
 
     [HttpPatch("review")]
-    public Task<IActionResult> ReviewRequest(CancellationToken token)
+    public async Task<IActionResult> ReviewRequest(ReviewCreditDTO data, CancellationToken token)
     {
-        throw new NotImplementedException();
+        ValidationResult result = await reviewValidator.ValidateAsync(data, token);
+
+        if (!result.IsValid)
+        {
+            return BadRequest(JsonConvert.SerializeObject(result.Errors.Select(x => x.ErrorMessage)));
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(JsonConvert.SerializeObject(ModelState.Values));
+        }
+
+        await creditService.ReviewCreditAsync(data, token);
+
+        return StatusCode(204);
     }
 
     [HttpGet("list")]
     public async Task<IActionResult> ListRequests(string? creditType, string? status, CancellationToken token)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(JsonConvert.SerializeObject(ModelState.Values));
+        }
+
         if (!string.IsNullOrWhiteSpace(creditType))
         {
             bool valid = Enum.TryParse<CreditType>(creditType, ignoreCase: true, out _);

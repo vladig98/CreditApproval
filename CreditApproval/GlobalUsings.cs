@@ -12,3 +12,4 @@ global using CreditApproval.Data.Data;
 global using Microsoft.EntityFrameworkCore;
 global using CreditApproval.Data.Models;
 global using CreditApproval.Services;
+global using CreditApproval.Enums;
