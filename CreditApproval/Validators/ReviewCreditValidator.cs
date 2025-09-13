@@ -2,7 +2,7 @@
 
 public class ReviewCreditValidator : AbstractValidator<ReviewCreditDTO>
 {
-    public ReviewCreditValidator(ICreditService creditService)
+    public ReviewCreditValidator(ICreditService creditService, IUserService userService)
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
 
@@ -12,7 +12,9 @@ public class ReviewCreditValidator : AbstractValidator<ReviewCreditDTO>
             .Must(id => !creditService.IsReviewed(id)).WithMessage("Credit was already reviewed");
 
         RuleFor(x => x.ReviewerName)
-            .NotEmpty().WithMessage("Reviewer name must be valid");
+            .NotEmpty().WithMessage("Reviewer name must be valid")
+            .Must(x => userService.Exists(x)).WithMessage("Reviewer does not exist")
+            .Must(x => userService.IsAdmin(x)).WithMessage("Reviewer is not an admin");
 
         RuleFor(x => x.Decision)
             .NotEmpty().WithMessage("Decision is required")

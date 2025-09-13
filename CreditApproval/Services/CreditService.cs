@@ -2,7 +2,8 @@
 
 public class CreditService(
     CreditApprovalDbContext dbContext,
-    CreditIdentifierGenerator identifierGenerator) : ICreditService
+    CreditIdentifierGenerator identifierGenerator,
+    IUserService userService) : ICreditService
 {
     private const decimal CREDIT_REJECTION_MULTIPLIER = 20M;
 
@@ -73,7 +74,9 @@ public class CreditService(
             _ => CreditStatus.PendingReview
         };
 
-        credit.Reviewer = data.ReviewerName;
+        User reviewer = await userService.GetByNameAsync(data.ReviewerName, token);
+
+        credit.Reviewer = reviewer;
         credit.ReviewTime = data.ReviewTime;
 
         await dbContext.SaveChangesAsync(token);
@@ -88,15 +91,11 @@ public class CreditService(
             Status = CreditStatus.PendingReview,
             CreditAmount = data.CreditAmount,
             CreditType = Enum.Parse<CreditType>(data.Type, ignoreCase: true),
-            MonthlyIncome = data.MonthlyIncome
+            MonthlyIncome = data.MonthlyIncome,
+            Identifier = identifierGenerator.GenerateIdentifier()
         };
 
         await dbContext.Credits.AddAsync(credit, token);
-        await dbContext.SaveChangesAsync(token);
-
-        string identifier = identifierGenerator.GenerateIdentifier(credit.Id);
-        credit.Identifier = identifier;
-
         await dbContext.SaveChangesAsync(token);
     }
 }

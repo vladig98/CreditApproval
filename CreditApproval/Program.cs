@@ -9,11 +9,20 @@ builder.Services.AddDbContext<CreditApprovalDbContext>(opt =>
     opt.UseInMemoryDatabase("InMemoryDB");
 });
 
-builder.Services.AddValidatorsFromAssemblyContaining<CreditValidator>(ServiceLifetime.Scoped);
+// Validators
+builder.Services.AddScoped<IValidator<SubmitCreditDTO>, CreditValidator>();
+builder.Services.AddScoped<IValidator<ReviewCreditDTO>, ReviewCreditValidator>();
+
+// Services
 builder.Services.AddSingleton<CreditIdentifierGenerator>();
 builder.Services.AddScoped<ICreditService, CreditService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddSingleton<IDataSeeder, DataSeeder>();
 
 WebApplication app = builder.Build();
+
+// Seed users
+await app.Services.GetRequiredService<IDataSeeder>().SeedUsers();
 
 if (app.Environment.IsDevelopment())
 {
