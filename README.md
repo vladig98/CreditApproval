@@ -1,3 +1,109 @@
+# Credit Approval API
+
+This is a **.NET 8 Web API** that provides endpoints to submit, review,
+and list credit requests.\
+It includes a simple data seeding mechanism that creates default users
+with different roles.
+
+------------------------------------------------------------------------
+
+## 📌 Endpoints
+
+  ---------------------------------------------------------------------------------
+  Endpoint                        Method             Description
+  ------------------------------- ------------------ ------------------------------
+  `/api/Credit/requests/submit`   `POST`             Submits a credit request.
+
+  `/api/Credit/requests/review`   `PATCH`             Reviews and approves/rejects a
+                                                     credit request (only
+                                                     accessible by **Admin**
+                                                     users).
+
+  `/api/Credit/requests/list`     `GET`              Lists all submitted credit
+                                                     requests.
+  ---------------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+## 🧑‍🤝‍🧑 User Seeding
+
+When the application starts, it automatically seeds three default users
+into the database:
+
+``` csharp
+await dbContext.Users.AddAsync(new User()
+{
+    Name = "Support user",
+    Role = Role.Support
+});
+
+await dbContext.Users.AddAsync(new User()
+{
+    Name = "Manager user",
+    Role = Role.Manager
+});
+
+await dbContext.Users.AddAsync(new User()
+{
+    Name = "Admin user",
+    Role = Role.Admin
+});
+```
+
+-   **Support user** -- Can view requests but cannot approve them.\
+-   **Manager user** -- Can view requests but cannot approve them.\
+-   **Admin user** -- Can approve requests.
+
+Only users with the **Admin** role can successfully approve credit
+requests via `api/Credit/requests/review`.
+
+------------------------------------------------------------------------
+
+## 🚀 Running the Application
+
+### Prerequisites
+
+-   [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+    installed
+
+### Steps
+
+1.  Clone the repository\
+2.  Navigate to the project folder.\
+3.  Run the following commands in a terminal:
+
+``` bash
+dotnet restore
+dotnet build
+dotnet run
+```
+
+4.  The API should now be available at:
+
+        https://localhost:5001
+        http://localhost:5000
+
+------------------------------------------------------------------------
+
+## 🧾 Assumptions Made
+
+-   User authentication/authorization is simplified --- roles are seeded
+    and assumed to be available for request handling.
+-   No real persistence layer is used beyond the seeded data (in-memory
+    DB assumed unless configured otherwise).
+-   Request validation is minimal and can be extended for production
+    use.
+
+------------------------------------------------------------------------
+
+## 🏗 Deliverables
+
+The solution includes: 
+- ✅ Complete source code\
+- ✅ Setup and execution instructions (this README)\
+- ✅ Seed data for testing (support, manager, and admin users)
+
+
 # Take-Home Task: Build a Simple Credit Approval API
 
 ## Background
