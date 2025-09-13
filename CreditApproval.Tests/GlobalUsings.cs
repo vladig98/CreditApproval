@@ -1,0 +1,10 @@
+﻿global using CreditApproval.Data.Data;
+global using CreditApproval.Data.Enums;
+global using CreditApproval.Data.Models;
+global using CreditApproval.DTOs;
+global using CreditApproval.Enums;
+global using CreditApproval.Helpers;
+global using CreditApproval.Services;
+global using CreditApproval.Services.Interfaces;
+global using Microsoft.EntityFrameworkCore;
+global using Moq;
