@@ -12,7 +12,7 @@ with different roles.
 | Endpoint | Method | Description |
 |---------|--------|-------------|
 | `/api/Credit/requests/submit` | `POST` | Submits a credit request. |
-| `/api/Credit/requests/review` | `POST` | Reviews and approves/rejects a credit request (only accessible by **Admin** users). |
+| `/api/Credit/requests/review` | `PATCH` | Reviews and approves/rejects a credit request (only accessible by **Admin** users). |
 | `/api/Credit/requests/list` | `GET` | Lists all submitted credit requests. |
 
 
