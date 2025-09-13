@@ -1,6 +1,6 @@
 ﻿namespace CreditApproval.Data.Enums;
 
-internal enum CreditType
+public enum CreditType
 {
     Mortgage = 0,
     Auto = 1,

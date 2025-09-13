@@ -1,6 +1,6 @@
 ﻿namespace CreditApproval.Data.Enums;
 
-internal enum CreditStatus
+public enum CreditStatus
 {
     PendingReview = 0,
     Approved = 1,

@@ -1,6 +1,6 @@
 ﻿namespace CreditApproval.Data.Data;
 
-internal class CreditApprovalDbContext : DbContext
+public class CreditApprovalDbContext(DbContextOptions<CreditApprovalDbContext> options) : DbContext(options)
 {
     public DbSet<CreditModel> Credits { get; set; }
 

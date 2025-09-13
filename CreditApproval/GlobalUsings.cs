@@ -1,3 +1,14 @@
 ﻿global using System.Text;
 global using CreditApproval.Helpers;
 global using Microsoft.AspNetCore.Mvc;
+global using CreditApproval.Data.Enums;
+global using CreditApproval.DTOs;
+global using FluentValidation;
+global using CreditApproval.Validators;
+global using FluentValidation.Results;
+global using Newtonsoft.Json;
+global using CreditApproval.Services.Interfaces;
+global using CreditApproval.Data.Data;
+global using Microsoft.EntityFrameworkCore;
+global using CreditApproval.Data.Models;
+global using CreditApproval.Services;
